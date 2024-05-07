@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "391385942371",
+    "project_id": "cerrado-vivo",
+    "storage_bucket": "cerrado-vivo.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:391385942371:android:d43084aa7e1498052e6b56",
+        "android_client_info": {
+          "package_name": "br.edu.ifgoiano.cerradovivo"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBQsGGJBvCbJAUI45Ee2W-L3KNy6MT43us"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
