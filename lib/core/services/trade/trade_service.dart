@@ -1,4 +1,3 @@
-import 'dart:async';
 import 'dart:math';
 
 import 'package:cerrado_vivo/core/models/product.dart';
@@ -32,13 +31,5 @@ class TradeService {
     return _products;
   }
 
-//  static MultiStreamController<List<Product>>? _controller;
-//  static final _prdStream = Stream<List<Product>>.multi((controller) {
-//    _controller = controller;
-//    controller.add(_products);
-//  });
-//
-//  Stream<List<Product>> _productsStream() {
-//    return _prdStream;
-//  }
+
 }

@@ -1,5 +1,4 @@
 import 'dart:io';
-
 import 'package:cerrado_vivo/components/user_image_picker.dart';
 import 'package:cerrado_vivo/core/models/auth_form_data.dart';
 import 'package:flutter/material.dart';
@@ -28,7 +27,7 @@ class _AuthFormState extends State<AuthForm> {
     ScaffoldMessenger.of(context).showSnackBar(
       SnackBar(
         content: Text(msg),
-        backgroundColor: Theme.of(context).errorColor,
+        backgroundColor: Theme.of(context).colorScheme.error,
       ),
     );
   }

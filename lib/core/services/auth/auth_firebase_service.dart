@@ -5,6 +5,7 @@ import 'package:cerrado_vivo/core/services/auth/auth_service.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_storage/firebase_storage.dart';
+import 'package:flutter/material.dart';
 
 class AuthFirebaseService implements AuthService {
 
@@ -13,10 +14,8 @@ class AuthFirebaseService implements AuthService {
   static final _userStream = Stream<ChatUser?>.multi((controller) async {
     final authChanges = FirebaseAuth.instance.authStateChanges();
     await for (final user in authChanges) {
-      print("antes de tentar pegar o currentuser");
       _currentUser = user == null ? null : toChatUser(user);
       controller.add(_currentUser);
-      print(_currentUser);
     }
   });
 
@@ -32,14 +31,6 @@ class AuthFirebaseService implements AuthService {
 
   Future<void> signup(
       String name, String email, String password, File? image) async {
-    //await Firebase.initializeApp(
-    //    options: FirebaseOptions(
-    //  apiKey: 'AIzaSyBQsGGJBvCbJAUI45Ee2W-L3KNy6MT43us',
-    //  appId: '1:391385942371:android:d43084aa7e1498052e6b56',
-    //  messagingSenderId: 'sendid',
-    //  projectId: 'cerrado-vivo',
-    //  storageBucket: 'cerrado-vivo.appspot.com',
-    //));
 
     try {
       final auth = FirebaseAuth.instance;
@@ -67,21 +58,11 @@ class AuthFirebaseService implements AuthService {
       }
     } catch (e) {
       print("Erro durante o cadastro: $e");
-      // Trate o erro conforme necessário
     }
   }
 
   @override
   Future<void> login(String email, String password) async {
-    //await Firebase.initializeApp(
-    //    options: FirebaseOptions(
-    //  apiKey: 'AIzaSyBQsGGJBvCbJAUI45Ee2W-L3KNy6MT43us',
-    //  appId: '1:391385942371:android:d43084aa7e1498052e6b56',
-    //  messagingSenderId: 'sendid',
-    //  projectId: 'cerrado-vivo',
-    //  storageBucket: 'cerrado-vivo.appspot.com',
-    //));
-
     await FirebaseAuth.instance.signInWithEmailAndPassword(
       email: email,
       password: password,
@@ -112,6 +93,12 @@ class AuthFirebaseService implements AuthService {
       'imageUrl': user.imageUrl,
     });
   }
+
+  static bool checkLoginStatus() {
+    final currentUser = FirebaseAuth.instance.currentUser;
+    return currentUser != null;
+  }
+
 
   static ChatUser toChatUser(User user, [String? name, String? imageUrl]) {
     return ChatUser(

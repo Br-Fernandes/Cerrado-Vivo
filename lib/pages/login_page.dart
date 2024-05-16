@@ -14,12 +14,9 @@ class LoginPage extends StatefulWidget {
 }
 
 class _LoginPageState extends State<LoginPage> {
-  bool _isLoading = false;
-
   Future<void> _handleSubmit(AuthFormData formData) async {
     try {
       if (!mounted) return;
-      setState(() => _isLoading = true);
 
       if (formData.isLogin) {
         // Login
@@ -29,7 +26,7 @@ class _LoginPageState extends State<LoginPage> {
         );
         Navigator.push(
           context,
-          MaterialPageRoute(builder: ((context) => HomePage()),
+          MaterialPageRoute(builder: ((context) => const HomePage()),
         ));
       } else {
         // Signup
@@ -40,15 +37,16 @@ class _LoginPageState extends State<LoginPage> {
           formData.image,
         );
         Navigator.push(
+          // ignore: use_build_context_synchronously
           context,
-          MaterialPageRoute(builder: ((context) => HomePage()),
+          MaterialPageRoute(builder: ((context) => const HomePage()),
         ));
       }
     } catch (error) {
       // Tratar erro!
     } finally {
+      // ignore: control_flow_in_finally
       if (!mounted) return;
-      setState(() => _isLoading = false);
     }
   }
 
@@ -65,16 +63,16 @@ class _LoginPageState extends State<LoginPage> {
               child: Stack(
                 children: [
                   ClipRRect(
-                    borderRadius: BorderRadius.only(
+                    borderRadius: const BorderRadius.only(
                       bottomLeft: Radius.elliptical(250, 110), 
                       bottomRight: Radius.elliptical(100, 50), 
                     ),
                     child: Container(
-                      color: Color(0xFF53AC3C),
+                      color: const Color(0xFF53AC3C),
                       child: Column(
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         children: [
-                          Header(),
+                          const Header(),
                           LoginForm(onSubmit: _handleSubmit),
                         ],
                       ),

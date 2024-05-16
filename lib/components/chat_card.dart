@@ -2,15 +2,17 @@ import 'dart:io';
 
 import 'package:cerrado_vivo/core/models/chat.dart';
 import 'package:cerrado_vivo/core/models/chat_user.dart';
+import 'package:cerrado_vivo/core/services/chat/conversation_firebase_service.dart';
+import 'package:cerrado_vivo/core/utils/chat_utils.dart';
 import 'package:cerrado_vivo/pages/chat_page.dart';
-import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:firebase_auth/firebase_auth.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/widgets.dart';
 
 class ChatCard extends StatefulWidget {
   final Chat chat;
 
-  ChatCard({super.key, required this.chat});
+  const ChatCard({super.key, required this.chat});
 
   @override
   State<ChatCard> createState() => _ChatCardState();
@@ -18,30 +20,76 @@ class ChatCard extends StatefulWidget {
 
 class _ChatCardState extends State<ChatCard> {
   ChatUser? _otherUser;
+  String? _lastMessage;
   static const _defaultImage = 'assets/images/avatar.png';
 
   @override
   void initState() {
     super.initState();
     _getOtherUser();
+    _getLastMessage();
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    if (_otherUser == null) {
+      return const SizedBox
+          .shrink(); // Retorna um widget vazio enquanto o _otherUser é nulo
+    }
+
+    return Container(
+      width: double.infinity,
+      height: 100,
+      decoration: const BoxDecoration(
+          border: Border(bottom: BorderSide(color: Colors.grey, width: 1))),
+      child: TextButton(
+        onPressed: () {
+          Navigator.of(context).push(MaterialPageRoute(
+              builder: (context) => ChatPage(
+                    chat: widget.chat,
+                  )));
+        },
+        child: Row(
+          children: [
+            Container(
+              padding: const EdgeInsets.all(10),
+              child: _showUserImage(_otherUser!.imageUrl, 80),
+            ),
+            Column(
+              mainAxisAlignment: MainAxisAlignment.spaceAround,
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Text(
+                  _otherUser!.name,
+                  style: const TextStyle(
+                      fontSize: 19,
+                      fontWeight: FontWeight.bold,
+                      color: Colors.black),
+                ),
+                Text(
+                  _lastMessage ?? '...',
+                  textAlign: TextAlign.left,
+                  style: const TextStyle(
+                    color: Colors.grey,
+                  ),
+                ),
+              ],
+            )
+          ],
+        ),
+      ),
+    );
   }
 
   Future<void> _getOtherUser() async {
-    final currentUser = FirebaseAuth.instance.currentUser!.uid;
-    final otherUserId = widget.chat.users.firstWhere((user) => user != currentUser);
-    final userDocRef = FirebaseFirestore.instance.collection('users').doc(otherUserId);
-    final userSnapshot = await userDocRef.get();
+    _otherUser = await ChatUtils().getOtherUser(widget.chat);
+    setState(() {});
+  }
 
-    if (userSnapshot.exists) {
-      final userData = userSnapshot.data()! as Map<String, dynamic>;
-      _otherUser = ChatUser(
-        id: userSnapshot.id,
-        name: userData['name'],
-        email: userData['email'],
-        imageUrl: userData['imageUrl'],
-      );
-      setState(() {});
-    }
+  Future<void> _getLastMessage() async {
+    _lastMessage =
+        await ConversationFirebaseService().getlastMessage(widget.chat);
+    setState(() {});
   }
 
   Widget _showUserImage(String imageUrl, double size) {
@@ -58,51 +106,7 @@ class _ChatCardState extends State<ChatCard> {
 
     return CircleAvatar(
       backgroundImage: provider,
-      radius: size / 2, 
-    );
-  }
-
-
-  @override
-  Widget build(BuildContext context) {
-    if (_otherUser == null) {
-      return const SizedBox.shrink(); // Retorna um widget vazio enquanto o _otherUser é nulo
-    }
-
-    return Container(
-      width: double.infinity,
-      height: 100,
-      decoration: BoxDecoration(
-        border: Border(
-          bottom: BorderSide(
-            color: Colors.grey,
-            width: 1
-          )
-        )
-      ),
-      child: TextButton(
-        onPressed: () {
-          Navigator.of(context).push(
-            MaterialPageRoute(
-              builder: (context) => ChatPage(
-                chat: widget.chat,
-              )
-            )
-          );  
-        },
-        child: Row(
-          children: [
-            Container(
-              padding: EdgeInsets.all(10),
-              child: _showUserImage(_otherUser!.imageUrl, 80),
-            ),
-            Text(
-              _otherUser!.name,
-              style: TextStyle(fontSize: 19),
-            )
-          ],
-        ),
-      ),
+      radius: size / 2,
     );
   }
 }

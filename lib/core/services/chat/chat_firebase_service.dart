@@ -4,6 +4,7 @@ import 'package:cerrado_vivo/core/models/chat_message.dart';
 import 'package:cerrado_vivo/core/models/chat_user.dart';
 import 'package:cerrado_vivo/core/services/chat/chat_service.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 
 class ChatFirebaseService implements ChatService {
   @override
@@ -38,8 +39,6 @@ class ChatFirebaseService implements ChatService {
 
   @override
   Future<ChatMessage?> save(String text, ChatUser user, Chat chat) async {
-    final store = FirebaseFirestore.instance;
-
     final msg = ChatMessage(
       id: '',
       text: text,
@@ -105,10 +104,29 @@ class ChatFirebaseService implements ChatService {
         .get();
 
     if (chatSnapshot.docs.length == 1) {
-      print(chatSnapshot.docs.first.id.toString());
       return chatSnapshot.docs.first.id;
     } else {
       throw Exception('Erro ao obter a referência da conversa');
     }
   } 
+
+  Future<ChatUser?> getOtherUser(Chat chat) async {
+    final currentUser = FirebaseAuth.instance.currentUser!.uid;
+    final otherUserId = chat.users.firstWhere((user) => user != currentUser);
+    final userDocRef = FirebaseFirestore.instance.collection('users').doc(otherUserId);
+    final userSnapshot = await userDocRef.get();
+
+    if (userSnapshot.exists) {
+      final userData = userSnapshot.data()!;
+      return ChatUser(
+        id: userSnapshot.id,
+        name: userData['name'],
+        email: userData['email'],
+        imageUrl: userData['imageUrl'] ?? 'assets/images/avatar.png',
+      );
+    } else {
+      return null;
+    }
+  }
+
 }

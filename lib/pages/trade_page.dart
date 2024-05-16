@@ -30,7 +30,7 @@ class TradePage extends StatelessWidget {
                   color: Colors.grey.withOpacity(0.5),
                   spreadRadius: 2,
                   blurRadius: 5,
-                  offset: Offset(0, 3),
+                  offset: const Offset(0, 3),
                 )
               ],
               border: const Border(
@@ -41,28 +41,26 @@ class TradePage extends StatelessWidget {
             child: Row(
               children: [
                 Expanded(
-                  child: Container(
-                    child:  Row(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: [
-                        TextButton(
-                          onPressed: () {},
-                          child: const Row(
-                            children: [
-                              Text(
-                                "Anunciar",
-                                style: TextStyle(color: Color(0xFF53AC3C))
-                              ),
-                              SizedBox(width: 7,),
-                              Icon(
-                                Icons.add_circle_outline,
-                                color: Color(0xFF53AC3C),
-                              ),
-                            ],
-                          ),
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      TextButton(
+                        onPressed: () {},
+                        child: const Row(
+                          children: [
+                            Text(
+                              "Anunciar",
+                              style: TextStyle(color: Color(0xFF53AC3C))
+                            ),
+                            SizedBox(width: 7,),
+                            Icon(
+                              Icons.add_circle_outline,
+                              color: Color(0xFF53AC3C),
+                            ),
+                          ],
                         ),
-                      ],
-                    ),
+                      ),
+                    ],
                   ),
                 ),
                 Container(
@@ -71,28 +69,26 @@ class TradePage extends StatelessWidget {
                   color: Colors.grey,
                 ),
                 Expanded(
-                  child: Container(
-                    child: Row(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: [
-                        TextButton(
-                          onPressed: () {},
-                          child: const Row(
-                            children: [
-                              Text(
-                                "Filtrar",
-                                style: TextStyle(color: Color(0xFF53AC3C)),
-                              ),
-                              SizedBox(width: 7,),
-                              Icon(
-                                Icons.tune,
-                                color: Color(0xFF53AC3C), 
-                              )
-                            ],
-                          ),
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      TextButton(
+                        onPressed: () {},
+                        child: const Row(
+                          children: [
+                            Text(
+                              "Filtrar",
+                              style: TextStyle(color: Color(0xFF53AC3C)),
+                            ),
+                            SizedBox(width: 7,),
+                            Icon(
+                              Icons.tune,
+                              color: Color(0xFF53AC3C), 
+                            )
+                          ],
                         ),
-                      ],
-                    ),
+                      ),
+                    ],
                   ),
                 ),
               ],
@@ -102,7 +98,7 @@ class TradePage extends StatelessWidget {
             child: SingleChildScrollView(
               child: ListView.builder(
                 shrinkWrap: true,
-                physics: NeverScrollableScrollPhysics(),
+                physics: const NeverScrollableScrollPhysics(),
                 itemCount: TradeService.getProducts().length,
                 itemBuilder: (context, index) {
                   final product = TradeService.getProducts()[index];

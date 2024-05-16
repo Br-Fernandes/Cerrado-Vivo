@@ -25,7 +25,6 @@ class _AuthPageState extends State<AuthPage> {
           formData.password,
         );
       } else {
-        print("entrei no signup 1");
         // Signup
         await AuthService().signup(
           formData.name,
@@ -33,7 +32,6 @@ class _AuthPageState extends State<AuthPage> {
           formData.password,
           formData.image,
         );
-        print("sai do signup 1");
       }
     } catch (error) {
       // Tratar erro!

@@ -1,8 +1,10 @@
 import 'package:cerrado_vivo/core/models/chat.dart';
 import 'package:cerrado_vivo/core/models/chat_message.dart';
 import 'package:cerrado_vivo/core/services/chat/conversation_service.dart';
+import 'package:cerrado_vivo/core/utils/chat_utils.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:flutter/material.dart';
 
 class ConversationFirebaseService implements ConversationService {
   @override
@@ -33,7 +35,7 @@ class ConversationFirebaseService implements ConversationService {
       return Stream.value(chatList);
     } else {
       // Lidar com o caso em que o usuário atual é nulo
-      return Stream.empty();
+      return const Stream.empty();
     }
   }
 
@@ -53,6 +55,24 @@ class ConversationFirebaseService implements ConversationService {
     );
   }
 
-  
+  Future<String> getlastMessage(Chat chat) async {
+    final store = FirebaseFirestore.instance;
+    final docSnapshot =  await store.collection('conversations').where('users', isEqualTo: chat.users).get();
+    final doc = docSnapshot.docs.first;
+
+    final messageRef = doc.reference.collection('messages');
+    final messagesSnapshot = await messageRef.orderBy('createdAt', descending: true)
+      .limit(1)
+      .get();
+
+    if(messagesSnapshot.docs.isNotEmpty) {
+      final lastMessage = messagesSnapshot.docs.first.data()['text'] as String;
+       return lastMessage; // ChatUtils().belongsToCurrentUser(messagesSnapshot.docs.first.data()['idUser'])
+        // ? 'Você: $lastMessage'
+        // : lastMessage;
+    } else {
+      return '';
+    }  
+  }
   
 }

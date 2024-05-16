@@ -10,10 +10,10 @@ class SpecieDetailsPage extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        backgroundColor: Color(0xFF53AC3C),
+        backgroundColor: const Color(0xFF53AC3C),
         title: Text(
           species.name,
-          style: TextStyle(color: Colors.white),
+          style: const TextStyle(color: Colors.white),
         ),
       ),
       body: Padding(
@@ -25,12 +25,11 @@ class SpecieDetailsPage extends StatelessWidget {
               width: double.infinity,
               height: 150,
             ),
-            SizedBox(height: 10,),
+            const SizedBox(height: 10,),
             Text(
               species.description,
-              style: TextStyle(
+              style: const TextStyle(
                 fontSize: 15,
-                
               ),
             )
           ],

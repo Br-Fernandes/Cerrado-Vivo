@@ -27,7 +27,7 @@ class SpeciesPage extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        backgroundColor: Color(0xFF53AC3C),
+        backgroundColor: const Color(0xFF53AC3C),
         title: const Text(
           "Selecione uma Espécie",
           style: TextStyle(color: Colors.white),
@@ -59,14 +59,14 @@ class SpeciesPage extends StatelessWidget {
               },
               leading: Image.asset(
                 speciesList[index].imagePath,
-                width: 50, // Ajuste conforme necessário
-                height: 50, // Ajuste conforme necessário
+                width: 50, 
+                height: 50, 
               ),
               title: Text(speciesList[index].name),
             ),
             const Divider(
               color: Colors.grey,
-              height: 0, // Espessura da linha
+              height: 0, 
             ),
           ],
         );

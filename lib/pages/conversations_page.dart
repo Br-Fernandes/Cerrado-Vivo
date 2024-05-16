@@ -1,6 +1,5 @@
 import 'package:cerrado_vivo/components/chat_card.dart';
 import 'package:cerrado_vivo/core/models/chat.dart';
-import 'package:cerrado_vivo/core/services/chat/chat_service.dart';
 import 'package:cerrado_vivo/core/services/chat/conversation_firebase_service.dart';
 import 'package:flutter/material.dart';
 
@@ -11,10 +10,17 @@ class ConversationsPage extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        backgroundColor: Color(0xFF53AC3C),
-        title: Text(
+        backgroundColor: const Color(0xFF53AC3C),
+        title: const Text(
           "Conversas",
           style: TextStyle(color: Colors.white),
+        ),
+        leading: IconButton(
+          icon: const Icon(
+            Icons.arrow_back,
+            color: Colors.white,
+          ),
+          onPressed: () { Navigator.of(context).pop(); },
         ),
         centerTitle: true,
       ),
@@ -31,12 +37,11 @@ class ConversationsPage extends StatelessWidget {
               },
             );
           } else if (snapshot.hasError) {
-            print(snapshot.error.toString());
             return Center(
               child: Text('${snapshot.error}'),
             );
           } else {
-            return Center(
+            return const Center(
               child: CircularProgressIndicator(),
             );
           }

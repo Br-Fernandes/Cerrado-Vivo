@@ -28,7 +28,7 @@ class _LoginFormState extends State<LoginForm> {
     ScaffoldMessenger.of(context).showSnackBar(
       SnackBar(
         content: Text(msg),
-        backgroundColor: Theme.of(context).errorColor,
+        backgroundColor: Theme.of(context).colorScheme.error,
       ),
     );
   }
@@ -42,9 +42,7 @@ class _LoginFormState extends State<LoginForm> {
       return _showError('Imagem não selecionada!');
     }
 
-    print("teste1");
     widget.onSubmit(_formData);
-    print("teste2");
   }
 
   @override
@@ -92,7 +90,7 @@ class _LoginFormState extends State<LoginForm> {
                     return null;
                   },
                 ),
-              SizedBox(
+              const SizedBox(
                 height: 7,
               ),
               TextFormField(
@@ -119,7 +117,7 @@ class _LoginFormState extends State<LoginForm> {
                   return null;
                 },
               ),
-              SizedBox(
+              const SizedBox(
                 height: 7,
               ),
               TextFormField(
@@ -157,13 +155,13 @@ class _LoginFormState extends State<LoginForm> {
                       _submit();
                     }
                   },
-                  child: Text(
-                    _formData.isLogin ? 'Entrar' : 'Cadastrar',
-                    style: TextStyle(fontSize: 20, color: Colors.black),
-                  ),
                   style: ButtonStyle(
                     backgroundColor: MaterialStateProperty.all(
                       Theme.of(context).colorScheme.secondary),
+                  ),
+                  child: Text(
+                    _formData.isLogin ? 'Entrar' : 'Cadastrar',
+                    style: const TextStyle(fontSize: 20, color: Colors.black),
                   ),
                 ),
               ),
@@ -175,7 +173,7 @@ class _LoginFormState extends State<LoginForm> {
                 },
                 child: Text(
                   _formData.isLogin ? 'Criar uma nova conta?' : 'Já possui conta?',
-                  style: TextStyle(
+                  style: const TextStyle(
                     color: Colors.black,
                   ),
                 ),

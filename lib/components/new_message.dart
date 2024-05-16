@@ -7,7 +7,7 @@ import 'package:flutter/material.dart';
 class NewMessage extends StatefulWidget {
   final Chat chat;
 
-  NewMessage({super.key, required this.chat});
+  const NewMessage({super.key, required this.chat});
 
   @override
   State<NewMessage> createState() => _NewMessageState();
