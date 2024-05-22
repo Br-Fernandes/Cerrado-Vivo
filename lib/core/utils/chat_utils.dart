@@ -12,6 +12,16 @@ class ChatUtils {
 
   ChatUtils._internal();
 
+  Future<ChatUser> getCurrentUser() async {
+    final currentUser = FirebaseAuth.instance.currentUser;
+    final userDocRef = await FirebaseFirestore.instance
+      .collection('users')
+      .doc(currentUser?.uid).get();
+
+    return toChatUser(userDocRef);
+
+  }
+
   Future<ChatUser?> getOtherUser(Chat chat) async {
     final currentUser = FirebaseAuth.instance.currentUser!.uid;
     final otherUserId = chat.users.firstWhere((user) => user != currentUser);
@@ -23,6 +33,7 @@ class ChatUtils {
       return ChatUser(
         id: userSnapshot.id,
         name: userData['name'],
+        origins: userData['origins'],
         email: userData['email'],
         imageUrl: userData['imageUrl'] ?? 'assets/images/avatar.png',
       );
@@ -31,12 +42,20 @@ class ChatUtils {
     }
   }
 
+  static ChatUser toChatUser(DocumentSnapshot<Map<String, dynamic>> user) {
+    return ChatUser(
+      id: user.id,
+      name: user['name'],
+      origins: user['origins'],
+      email: user['email'],
+      imageUrl: user['imageUrl'] ?? 'assets/images/avatar.png',
+    );
+  }
+
   bool belongsToCurrentUser(String idUser) {
     final auth = FirebaseAuth.instance;
     final currentUser = auth.currentUser!.uid;
-    print(currentUser);
 
     return currentUser == idUser;
   }
-
 }

@@ -9,6 +9,7 @@ abstract class AuthService {
 
   Future<void> signup(
     String name,
+    String origins,
     String email,
     String password,
     File? image,

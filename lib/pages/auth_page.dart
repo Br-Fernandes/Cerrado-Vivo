@@ -28,6 +28,7 @@ class _AuthPageState extends State<AuthPage> {
         // Signup
         await AuthService().signup(
           formData.name,
+          formData.origins,
           formData.email,
           formData.password,
           formData.image,

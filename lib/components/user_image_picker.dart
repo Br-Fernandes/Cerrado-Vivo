@@ -37,33 +37,66 @@ class _UserImagePickerState extends State<UserImagePicker> {
 
   @override
   Widget build(BuildContext context) {
-    return Column(
-      children: [
-        CircleAvatar(
-          radius: 40,
-          backgroundColor: Colors.grey,
-          backgroundImage: _image != null ? FileImage(_image!) : null,
-        ),
-        TextButton(
-          onPressed: _pickImage,
-          child: const Row(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-              Icon(
-                Icons.image,
-                color: Colors.black,
-              ),
-              SizedBox(width: 10),
-              Text(
-                'Adicionar Imagem',
-                style: TextStyle(
-                  color: Colors.black
+    return Container(
+      padding: EdgeInsets.all(16),
+      child: Row(
+        children: [
+          Expanded(
+            child: Column(
+              children: [
+                const Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    Text(
+                      'Adicione sua foto',
+                      style: TextStyle(
+                        color: Colors.black,
+                        fontSize: 13,
+                        fontWeight: FontWeight.bold,
+                      ),
+                    ),
+                    Icon(
+                      Icons.image,
+                      color: Colors.black,
+                    )
+                  ],
                 ),
-              ),
-            ],
+                TextButton(
+                  onPressed: _pickImage,
+                  child: Stack(
+                    alignment: Alignment.center,
+                    children: [
+                      Container(
+                        width: 60,
+                        height: 60,
+                        decoration: BoxDecoration(
+                          shape: BoxShape.circle,
+                          color: Colors.grey[300],
+                        ),
+                      ),
+                      if (_image != null)
+                        ClipOval(
+                          child: Image.file(
+                            _image!,
+                            width: 60,
+                            height: 60,
+                            fit: BoxFit.cover,
+                          ),
+                        )
+                      else
+                        Icon(
+                          Icons.person,
+                          size: 50,
+                          color: Colors.grey[600],
+                        ),
+                    ],
+                  ),
+                ),
+              ],
+            ),
           ),
-        ),
-      ],
+        ],
+      ),
     );
   }
 }

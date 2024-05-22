@@ -121,6 +121,7 @@ class ChatFirebaseService implements ChatService {
       return ChatUser(
         id: userSnapshot.id,
         name: userData['name'],
+        origins: userData['origins'],
         email: userData['email'],
         imageUrl: userData['imageUrl'] ?? 'assets/images/avatar.png',
       );
@@ -128,5 +129,4 @@ class ChatFirebaseService implements ChatService {
       return null;
     }
   }
-
 }

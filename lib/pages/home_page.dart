@@ -1,5 +1,6 @@
 import 'package:cerrado_vivo/components/header.dart';
 import 'package:cerrado_vivo/pages/conversations_page.dart';
+import 'package:cerrado_vivo/pages/social_media.dart';
 import 'package:cerrado_vivo/pages/species_page.dart';
 import 'package:cerrado_vivo/pages/trade_page.dart';
 import 'package:chewie/chewie.dart';
@@ -11,31 +12,17 @@ class HomePage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      backgroundColor: const Color(0xFF53AC3C),
+    return const Scaffold(
+      backgroundColor: Color(0xFF53AC3C),
       body: Stack(
         children: [
-          const Column(
+          Column(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
               Header(),
               HomeCard(),
             ],
           ),
-          Positioned(
-            top: 45,
-            right: 16,
-            child: IconButton(
-              onPressed: () {
-                Navigator.push(
-                  context,
-                  MaterialPageRoute(
-                    builder: (context) => const ConversationsPage(),
-                  ),
-                );
-            },
-            icon: const Icon(Icons.message_sharp)),
-          )
         ]  
       ),
     );
@@ -96,7 +83,7 @@ class HomeCard extends StatelessWidget {
                           Navigator.push(
                             context,
                             MaterialPageRoute(
-                              builder: (context) => const TradePage(),
+                              builder: (context) => const SocialMedia(),
                             ),
                           );
                         },

@@ -32,6 +32,13 @@ class SpeciesPage extends StatelessWidget {
           "Selecione uma Espécie",
           style: TextStyle(color: Colors.white),
         ),
+        leading: IconButton(
+          icon: const Icon(
+            Icons.arrow_back,
+            color: Colors.white,
+          ),
+          onPressed: () { Navigator.of(context).pop(); },
+        ),
         actions: [
           IconButton(
             icon: const Icon(

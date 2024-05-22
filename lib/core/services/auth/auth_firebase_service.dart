@@ -30,7 +30,7 @@ class AuthFirebaseService implements AuthService {
   }
 
   Future<void> signup(
-      String name, String email, String password, File? image) async {
+      String name, String origins, String email, String password, File? image) async {
 
     try {
       final auth = FirebaseAuth.instance;
@@ -53,7 +53,7 @@ class AuthFirebaseService implements AuthService {
         await login(email, password);
 
         // 3. salvar usuário no banco de dados (opcional)
-        _currentUser = toChatUser(credential.user!, name, imageUrl);
+        _currentUser = toChatUser(credential.user!, name, origins, imageUrl);
         await _saveChatUser(_currentUser!);
       }
     } catch (e) {
@@ -87,8 +87,11 @@ class AuthFirebaseService implements AuthService {
     final store = FirebaseFirestore.instance;
     final docRef = store.collection('users').doc(user.id);
 
+    print(user.origins);
+
     return docRef.set({
       'name': user.name,
+      'origins': user.origins,
       'email': user.email,
       'imageUrl': user.imageUrl,
     });
@@ -100,10 +103,11 @@ class AuthFirebaseService implements AuthService {
   }
 
 
-  static ChatUser toChatUser(User user, [String? name, String? imageUrl]) {
+  static ChatUser toChatUser(User user, [String? name, String? origins, String? imageUrl]) {
     return ChatUser(
       id: user.uid,
       name: name ?? user.displayName ?? user.email!.split('@')[0],
+      origins: origins ?? '',
       email: user.email!,
       imageUrl: imageUrl ?? user.photoURL ?? 'assets/images/avatar.png',
     );

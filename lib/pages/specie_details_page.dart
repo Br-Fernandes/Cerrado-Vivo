@@ -15,6 +15,13 @@ class SpecieDetailsPage extends StatelessWidget {
           species.name,
           style: const TextStyle(color: Colors.white),
         ),
+        leading: IconButton(
+          icon: const Icon(
+            Icons.arrow_back,
+            color: Colors.white,
+          ),
+          onPressed: () { Navigator.of(context).pop(); },
+        ),
       ),
       body: Padding(
         padding: const EdgeInsets.all(15.0),
@@ -28,6 +35,7 @@ class SpecieDetailsPage extends StatelessWidget {
             const SizedBox(height: 10,),
             Text(
               species.description,
+              textAlign: TextAlign.justify,
               style: const TextStyle(
                 fontSize: 15,
               ),
