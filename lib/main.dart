@@ -1,6 +1,7 @@
-import 'package:cerrado_vivo/core/services/notification/chat_notification_service.dart';
-import 'package:cerrado_vivo/pages/login_page.dart';
-import 'package:cerrado_vivo/pages/splash_screen.dart';
+import 'package:cerrado_vivo/services/notification/chat_notification_service.dart';
+import 'package:cerrado_vivo/views/pages/home_page.dart';
+import 'package:cerrado_vivo/views/pages/login_page.dart';
+import 'package:cerrado_vivo/views/pages/splash_screen.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
@@ -10,6 +11,8 @@ Future<void> main() async {
   await const MyApp().initializeFirebaseApp();
   runApp(const MyApp());
 }
+
+final GlobalKey<NavigatorState> navigatorKey = GlobalKey<NavigatorState>();
 
 class MyApp extends StatelessWidget {
   const MyApp({super.key});
@@ -24,15 +27,10 @@ class MyApp extends StatelessWidget {
       ],
       child: MaterialApp(
         title: 'Flutter Demo',
-        theme: ThemeData(
-          useMaterial3: true,
-          colorScheme: ColorScheme.fromSeed(
-            seedColor: const Color.fromARGB(255,83,172,60),
-            secondary: const Color.fromARGB(255, 255, 234, 0)
-          ),
-        
-        ),
-         home: const SplashScreen(), //AuthOrAppPage(),
+        navigatorKey: navigatorKey,
+        onGenerateRoute: generateRoute, 
+        theme: themeData(),
+        home: const SplashScreen(), //AuthOrAppPage(),
         debugShowCheckedModeBanner: false,
       ),
     );
@@ -48,5 +46,26 @@ class MyApp extends StatelessWidget {
         storageBucket: 'cerrado-vivo.appspot.com',
       )
     );
+  }
+}
+
+ThemeData themeData() {
+  return ThemeData(
+    useMaterial3: true,
+    colorScheme: ColorScheme.fromSeed(
+      seedColor: const Color.fromARGB(255,83,172,60),
+      secondary: const Color.fromARGB(255, 255, 234, 0)
+    )
+  );  
+}
+
+Route<dynamic> generateRoute(RouteSettings settings) {
+  switch (settings.name) {
+    case '/LoginPage':
+      return MaterialPageRoute(builder: ((context) => const LoginPage()));
+    case '/HomePage':
+      return MaterialPageRoute(builder: ((context) => const HomePage()));  
+    default:
+     return MaterialPageRoute(builder: ((context) => const SplashScreen()));  
   }
 }
