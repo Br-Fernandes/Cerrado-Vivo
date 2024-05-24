@@ -30,7 +30,7 @@ class MyApp extends StatelessWidget {
         navigatorKey: navigatorKey,
         onGenerateRoute: generateRoute, 
         theme: themeData(),
-        home: const SplashScreen(), //AuthOrAppPage(),
+        home: const LoginPage(), //AuthOrAppPage(),
         debugShowCheckedModeBanner: false,
       ),
     );

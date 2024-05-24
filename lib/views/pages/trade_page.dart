@@ -1,3 +1,4 @@
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:cerrado_vivo/view_model/pages/trade_view_model.dart';
 import 'package:cerrado_vivo/views/components/product_card.dart';
 import 'package:cerrado_vivo/views/components/user_drawer.dart';
@@ -65,10 +66,18 @@ class _TradePageState extends State<TradePage> {
                             color: Colors.white,
                             size: 18,
                           ),
-                          CircleAvatar(
-                            radius: 22,
-                            backgroundImage: NetworkImage(
-                                viewModel.currentUser!.imageUrl),
+                          CachedNetworkImage(
+                            imageUrl: viewModel.currentUser!.imageUrl,
+                            imageBuilder: (context, imageProvider) => CircleAvatar(
+                              radius: 22,
+                              backgroundImage: NetworkImage(
+                                viewModel.currentUser!.imageUrl
+                              ),
+                            ),
+                            width: 44,
+                            height: 44,
+                            placeholder: (context, url) => const CircularProgressIndicator(),
+                            errorWidget: (context, url, error) => const Icon(Icons.error)
                           ),
                         ],
                       ),

@@ -1,5 +1,3 @@
-import 'dart:io';
-
 import 'package:cerrado_vivo/view_model/components/user_form_viewmodel.dart';
 import 'package:cerrado_vivo/views/components/this_text_form_field.dart';
 import 'package:cerrado_vivo/views/components/user_image_picker.dart';

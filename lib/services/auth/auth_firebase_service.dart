@@ -28,7 +28,7 @@ class AuthFirebaseService implements AuthService {
     return _userStream;
   }
 
-  Future<void> signup(
+  Future<bool> signup(
       String name, String origins, String email, String password, File? image) async {
 
     try {
@@ -54,18 +54,25 @@ class AuthFirebaseService implements AuthService {
         // 3. salvar usuário no banco de dados (opcional)
         _currentUser = toChatUser(credential.user!, name, origins, imageUrl);
         await _saveChatUser(_currentUser!);
+
+        return true;
       }
     } catch (e) {
       print("Erro durante o cadastro: $e");
     }
+    return false;
   }
 
   @override
-  Future<void> login(String email, String password) async {
-    await FirebaseAuth.instance.signInWithEmailAndPassword(
+  Future<bool> login(String email, String password) async {
+    UserCredential credential = await FirebaseAuth.instance.signInWithEmailAndPassword(
       email: email,
       password: password,
     );
+
+    if (credential.user != null) return true;
+    
+    return false;
   }
 
   @override

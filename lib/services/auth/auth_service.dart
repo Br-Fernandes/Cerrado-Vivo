@@ -7,7 +7,7 @@ abstract class AuthService {
 
   Stream<ChatUser?> get userChanges;
 
-  Future<void> signup(
+  Future<bool> signup(
     String name,
     String origins,
     String email,
@@ -15,7 +15,7 @@ abstract class AuthService {
     File? image,
   );
 
-  Future<void> login(
+  Future<bool> login(
     String email,
     String password,
   );

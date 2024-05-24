@@ -22,6 +22,8 @@ class UserDrawer extends StatelessWidget {
                   radius: 85,
                   backgroundImage: imageProvider,
                 ),
+                width: 170, 
+                height: 170,
                 placeholder: (context, url) => const CircularProgressIndicator(),
                 errorWidget: (context, url, error) => const Icon(Icons.error)
               ),

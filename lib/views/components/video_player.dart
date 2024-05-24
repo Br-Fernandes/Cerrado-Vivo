@@ -32,9 +32,6 @@ class _VideoPlayerWidgetState extends State<VideoPlayerWidget> {
       autoPlay: false,
       looping: true,
       showControls: true,
-      customControls: const Material(
-        borderOnForeground: false,
-      )
     );
   }
 

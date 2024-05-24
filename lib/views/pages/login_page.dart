@@ -1,3 +1,5 @@
+import 'dart:ui';
+
 import 'package:cerrado_vivo/models/auth_form_data.dart';
 import 'package:cerrado_vivo/services/auth/auth_service.dart';
 import 'package:cerrado_vivo/view_model/pages/login_view_model.dart';
@@ -37,49 +39,65 @@ class _LoginPageState extends State<LoginPage> {
       child: Consumer<LoginPageViewModel>(
         builder: (context, viewModel, child) {
           return Scaffold(
-            body: SingleChildScrollView(
-              child: ConstrainedBox(
-                constraints: BoxConstraints(
-                  minWidth: MediaQuery.of(context).size.width,
-                  minHeight: MediaQuery.of(context).size.height,
-                ),
-                child: IntrinsicHeight(
-                  child: Column(
-                    mainAxisAlignment: MainAxisAlignment.start,
-                    children: [
-                      Expanded(
-                        flex: 8,
-                        child: Center(
-                          child: Stack(
-                            children: [
-                              ClipRRect(
-                                borderRadius: const BorderRadius.only(
-                                  bottomLeft: Radius.elliptical(250, 110),
-                                  bottomRight: Radius.elliptical(100, 50),
-                                ),
-                                child: Container(
-                                  color: const Color(0xFF53AC3C),
-                                  child: UserForm(onSubmit: _handleSubmit),
-                                ),
+            body: Stack(
+              children: [
+                SingleChildScrollView(
+                  child: ConstrainedBox(
+                    constraints: BoxConstraints(
+                      minWidth: MediaQuery.of(context).size.width,
+                      minHeight: MediaQuery.of(context).size.height,
+                    ),
+                    child: IntrinsicHeight(
+                      child: Column(
+                        mainAxisAlignment: MainAxisAlignment.start,
+                        children: [
+                          Expanded(
+                            flex: 8,
+                            child: Center(
+                              child: Stack(
+                                children: [
+                                  ClipRRect(
+                                    borderRadius: const BorderRadius.only(
+                                      bottomLeft: Radius.elliptical(250, 110),
+                                      bottomRight: Radius.elliptical(100, 50),
+                                    ),
+                                    child: Container(
+                                      color: const Color(0xFF53AC3C),
+                                      child: UserForm(onSubmit: _handleSubmit),
+                                    ),
+                                  ),
+                                  const Positioned(
+                                    top: 0,
+                                    left: 0,
+                                    right: 0,
+                                    child: Header(),
+                                  )
+                                ],
                               ),
-                              const Positioned(
-                                top: 0,
-                                left: 0,
-                                right: 0,
-                                child: Header(),
-                              )
-                            ],
+                            ),
                           ),
-                        ),
+                          Expanded(
+                            flex: 2,
+                            child: Container(), // Preenchimento inferior de 30% da tela
+                          ),
+                        ],
                       ),
-                      Expanded(
-                        flex: 2,
-                        child: Container(), // Preenchimento inferior de 30% da tela
-                      ),
-                    ],
+                    ),
                   ),
                 ),
-              ),
+                if (viewModel.isLoading)
+                  Positioned.fill(
+                    child: BackdropFilter(
+                      filter: ImageFilter.blur(sigmaX: 5, sigmaY: 5),
+                      child: Container(
+                        color: Colors.black.withOpacity(0.2),
+                        child: const Center(
+                          child: CircularProgressIndicator(),
+                        ),
+                      ),
+                    ),
+                  ),
+              ],
             ),
           );
         },
