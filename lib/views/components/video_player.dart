@@ -32,7 +32,11 @@ class _VideoPlayerWidgetState extends State<VideoPlayerWidget> {
       autoPlay: false,
       looping: true,
       showControls: true,
-    );
+      materialProgressColors: ChewieProgressColors(
+        backgroundColor: Colors.white,
+        playedColor: Theme.of(context).primaryColor
+      )
+    );  
   }
 
   @override

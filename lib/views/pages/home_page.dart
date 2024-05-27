@@ -59,11 +59,6 @@ class HomeCard extends StatelessWidget {
                             ),
                           );
                         },
-                        style: ButtonStyle(
-                          backgroundColor: MaterialStateProperty.all(
-                            Theme.of(context).colorScheme.secondary,
-                          ),
-                        ),
                         child: const Text(
                           "Ver Espécies",
                           style: TextStyle(
@@ -84,11 +79,6 @@ class HomeCard extends StatelessWidget {
                             ),
                           );
                         },
-                        style: ButtonStyle(
-                          backgroundColor: MaterialStateProperty.all(
-                            Theme.of(context).colorScheme.secondary,
-                          ),
-                        ),
                         child: const Text(
                           "Coletores",
                           style: TextStyle(

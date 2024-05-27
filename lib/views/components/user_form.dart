@@ -108,10 +108,6 @@ class _LoginFormState extends State<UserForm> {
                           viewModel.submit(context, _formKey);
                         }
                       },
-                      style: ButtonStyle(
-                        backgroundColor: MaterialStateProperty.all(
-                          Theme.of(context).colorScheme.secondary),
-                      ),
                       child: Text(
                         viewModel.formData.isLogin ? 'Entrar' : 'Cadastrar',
                         style: const TextStyle(fontSize: 20, color: Colors.black),

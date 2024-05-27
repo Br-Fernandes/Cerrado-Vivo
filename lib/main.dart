@@ -1,4 +1,5 @@
 import 'package:cerrado_vivo/services/notification/chat_notification_service.dart';
+import 'package:cerrado_vivo/utils/themes.dart';
 import 'package:cerrado_vivo/views/pages/home_page.dart';
 import 'package:cerrado_vivo/views/pages/login_page.dart';
 import 'package:cerrado_vivo/views/pages/splash_screen.dart';
@@ -29,8 +30,8 @@ class MyApp extends StatelessWidget {
         title: 'Flutter Demo',
         navigatorKey: navigatorKey,
         onGenerateRoute: generateRoute, 
-        theme: themeData(),
-        home: const LoginPage(), //AuthOrAppPage(),
+        theme: ThemesColors.getThemeFromKey(MyThemeKeys.LIGHT),
+        home: const SplashScreen(), //AuthOrAppPage(),
         debugShowCheckedModeBanner: false,
       ),
     );
