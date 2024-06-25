@@ -1,5 +1,5 @@
 import 'package:cerrado_vivo/models/chat_message.dart';
-import 'package:cerrado_vivo/view_model/components/message_bubble_view_model.dart';
+import 'package:cerrado_vivo/modelview/components/message_bubble_view_model.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 

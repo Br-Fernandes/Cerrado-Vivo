@@ -1,11 +1,11 @@
 import 'dart:io';
-import 'package:cerrado_vivo/models/chat_user.dart';
+import 'package:cerrado_vivo/models/user_app.dart';
 import 'package:cerrado_vivo/services/auth/auth_firebase_service.dart';
 
 abstract class AuthService {
-  ChatUser? get currentUser;
+  UserApp? get currentUser;
 
-  Stream<ChatUser?> get userChanges;
+  Stream<UserApp?> get userChanges;
 
   Future<bool> signup(
     String name,

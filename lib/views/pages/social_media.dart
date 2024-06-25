@@ -1,4 +1,4 @@
-import 'package:cerrado_vivo/view_model/pages/social_media_view_model.dart';
+import 'package:cerrado_vivo/modelview/pages/social_media_view_model.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 

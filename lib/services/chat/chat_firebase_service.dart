@@ -1,7 +1,7 @@
 import 'dart:async';
 import 'package:cerrado_vivo/models/chat.dart';
 import 'package:cerrado_vivo/models/chat_message.dart';
-import 'package:cerrado_vivo/models/chat_user.dart';
+import 'package:cerrado_vivo/models/user_app.dart';
 import 'package:cerrado_vivo/services/chat/chat_service.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
@@ -38,7 +38,7 @@ class ChatFirebaseService implements ChatService {
 
 
   @override
-  Future<ChatMessage?> save(String text, ChatUser user, Chat chat) async {
+  Future<ChatMessage?> save(String text, UserApp user, Chat chat) async {
     final msg = ChatMessage(
       id: '',
       text: text,
@@ -110,7 +110,7 @@ class ChatFirebaseService implements ChatService {
     }
   } 
 
-  Future<ChatUser?> getOtherUser(Chat chat) async {
+  Future<UserApp?> getOtherUser(Chat chat) async {
     final currentUser = FirebaseAuth.instance.currentUser!.uid;
     final otherUserId = chat.users.firstWhere((user) => user != currentUser);
     final userDocRef = FirebaseFirestore.instance.collection('users').doc(otherUserId);
@@ -118,10 +118,9 @@ class ChatFirebaseService implements ChatService {
 
     if (userSnapshot.exists) {
       final userData = userSnapshot.data()!;
-      return ChatUser(
+      return UserApp(
         id: userSnapshot.id,
         name: userData['name'],
-        origins: userData['origins'],
         email: userData['email'],
         imageUrl: userData['imageUrl'] ?? 'assets/images/avatar.png',
       );

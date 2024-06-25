@@ -1,5 +1,5 @@
 import 'package:cached_network_image/cached_network_image.dart';
-import 'package:cerrado_vivo/view_model/pages/trade_view_model.dart';
+import 'package:cerrado_vivo/modelview/pages/trade_view_model.dart';
 import 'package:cerrado_vivo/views/components/product_card.dart';
 import 'package:cerrado_vivo/views/components/user_drawer.dart';
 import 'package:flutter/material.dart';

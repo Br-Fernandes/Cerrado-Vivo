@@ -1,7 +1,7 @@
 import 'package:cerrado_vivo/views/components/message_bubble.dart';
 import 'package:cerrado_vivo/models/chat.dart';
 import 'package:cerrado_vivo/models/chat_message.dart';
-import 'package:cerrado_vivo/models/chat_user.dart';
+import 'package:cerrado_vivo/models/user_app.dart';
 import 'package:cerrado_vivo/services/auth/auth_firebase_service.dart';
 import 'package:cerrado_vivo/services/chat/chat_service.dart';
 import 'package:flutter/material.dart';
@@ -25,7 +25,7 @@ class Messages extends StatelessWidget {
           if (messagesStream == null) {
             return const Center(child: Text('Sem dados. Vamos conversar?'));
           }
-          return StreamBuilder<ChatUser?>(
+          return StreamBuilder<UserApp?>(
             stream: AuthFirebaseService().userChanges,
             builder: (context, userSnapshot) {
               if (userSnapshot.connectionState == ConnectionState.waiting) {

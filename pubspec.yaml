@@ -19,7 +19,7 @@ publish_to: 'none' # Remove this line if you wish to publish to pub.dev
 version: 1.0.0+1
 
 environment:
-  sdk: '>=3.3.0 <4.0.0'
+  sdk: '>=3.3.3 <4.0.0'
 
 # Dependencies specify other packages that your package needs in order to work.
 # To automatically upgrade your package dependencies to the latest versions
@@ -45,13 +45,14 @@ dependencies:
   video_player: ^2.8.6
   chewie: ^1.8.1
   cached_network_image: ^3.3.1
-  mobx: ^2.3.3+2
-  flutter_mobx: ^2.2.1+1
-
+  get: ^4.6.6
+  device_info_plus: ^10.1.0
+  cerrado_vivo_copy_3310202680_f2f:
+        git: https://f2f.bostonux.com/packages/cerrado_vivo_copy_3310202680_f2f
+  
 dev_dependencies:
   flutter_test:
     sdk: flutter
-  mobx_codegen: ^2.6.1  
   build_runner: ^2.4.9
   flutter_launcher_icons: ^0.13.1
 

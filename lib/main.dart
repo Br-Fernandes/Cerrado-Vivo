@@ -1,3 +1,4 @@
+import 'package:cerrado_vivo/controllers/auth_controller.dart';
 import 'package:cerrado_vivo/services/notification/chat_notification_service.dart';
 import 'package:cerrado_vivo/utils/themes.dart';
 import 'package:cerrado_vivo/views/pages/home_page.dart';
@@ -5,11 +6,17 @@ import 'package:cerrado_vivo/views/pages/login_page.dart';
 import 'package:cerrado_vivo/views/pages/splash_screen.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
+import 'package:get/get.dart';
 import 'package:provider/provider.dart';
 
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await const MyApp().initializeFirebaseApp();
+  Get.put(AuthController());
+  SystemChrome.setSystemUIOverlayStyle(const SystemUiOverlayStyle( 
+    statusBarColor: Colors.green, 
+  )); 
   runApp(const MyApp());
 }
 
@@ -26,12 +33,12 @@ class MyApp extends StatelessWidget {
           create: (_) => ChatNotificationService(),
         ),
       ],
-      child: MaterialApp(
+      child: GetMaterialApp(
         title: 'Flutter Demo',
         navigatorKey: navigatorKey,
         onGenerateRoute: generateRoute, 
         theme: ThemesColors.getThemeFromKey(MyThemeKeys.LIGHT),
-        home: const SplashScreen(), //AuthOrAppPage(),
+        home: const SplashScreen(),
         debugShowCheckedModeBanner: false,
       ),
     );

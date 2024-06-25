@@ -1,6 +1,6 @@
 import 'dart:io';
 import 'dart:async';
-import 'package:cerrado_vivo/models/chat_user.dart';
+import 'package:cerrado_vivo/models/user_app.dart';
 import 'package:cerrado_vivo/services/auth/auth_service.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
@@ -9,8 +9,8 @@ import 'package:firebase_storage/firebase_storage.dart';
 class AuthFirebaseService implements AuthService {
 
 
-  static ChatUser? _currentUser;
-  static final _userStream = Stream<ChatUser?>.multi((controller) async {
+  static UserApp? _currentUser;
+  static final _userStream = Stream<UserApp?>.multi((controller) async {
     final authChanges = FirebaseAuth.instance.authStateChanges();
     await for (final user in authChanges) {
       _currentUser = user == null ? null : toChatUser(user);
@@ -19,12 +19,12 @@ class AuthFirebaseService implements AuthService {
   });
 
   @override
-  ChatUser? get currentUser {
+  UserApp? get currentUser {
     return _currentUser;
   }
 
   @override
-  Stream<ChatUser?> get userChanges {
+  Stream<UserApp?> get userChanges {
     return _userStream;
   }
 
@@ -89,15 +89,12 @@ class AuthFirebaseService implements AuthService {
     return await imageRef.getDownloadURL();
   }
 
-  Future<void> _saveChatUser(ChatUser user) async {
+  Future<void> _saveChatUser(UserApp user) async {
     final store = FirebaseFirestore.instance;
     final docRef = store.collection('users').doc(user.id);
 
-    print(user.origins);
-
     return docRef.set({
       'name': user.name,
-      'origins': user.origins,
       'email': user.email,
       'imageUrl': user.imageUrl,
     });
@@ -109,11 +106,10 @@ class AuthFirebaseService implements AuthService {
   }
 
 
-  static ChatUser toChatUser(User user, [String? name, String? origins, String? imageUrl]) {
-    return ChatUser(
+  static UserApp toChatUser(User user, [String? name, String? origins, String? imageUrl]) {
+    return UserApp(
       id: user.uid,
       name: name ?? user.displayName ?? user.email!.split('@')[0],
-      origins: origins ?? '',
       email: user.email!,
       imageUrl: imageUrl ?? user.photoURL ?? 'assets/images/avatar.png',
     );

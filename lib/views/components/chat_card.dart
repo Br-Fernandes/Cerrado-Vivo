@@ -1,6 +1,6 @@
 import 'package:cerrado_vivo/models/chat.dart';
 import 'package:cerrado_vivo/services/chat/conversation_firebase_service.dart';
-import 'package:cerrado_vivo/view_model/components/chat_card_view_model.dart';
+import 'package:cerrado_vivo/modelview/components/chat_card_view_model.dart';
 import 'package:cerrado_vivo/views/pages/chat_page.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';

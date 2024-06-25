@@ -1,10 +1,10 @@
 import 'package:cached_network_image/cached_network_image.dart';
-import 'package:cerrado_vivo/models/chat_user.dart';
+import 'package:cerrado_vivo/models/user_app.dart';
 import 'package:cerrado_vivo/services/auth/auth_service.dart';
 import 'package:flutter/material.dart';
 
 class UserDrawer extends StatelessWidget {
-  final ChatUser user;
+  final UserApp user;
 
   const UserDrawer({super.key, required this.user});
 
@@ -46,18 +46,7 @@ class UserDrawer extends StatelessWidget {
                         )
                       ],
                     ),
-                    Column(
-                      children: [
-                        const Text(
-                          '',
-                          style: TextStyle(fontWeight: FontWeight.bold),
-                        ),
-                        Text(
-                          user.origins,
-                          style: const TextStyle(fontSize: 13),
-                        )
-                      ],
-                    )
+                    
                   ],
                 ),
               )
