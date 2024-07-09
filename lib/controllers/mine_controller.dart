@@ -14,5 +14,16 @@ class MineController extends GetxController {
     docRef.update(data).then((value) => print('Bio atualizada'));
   }
 
+  void editLocation(String? selectedCity) {
+    String userId = authController.currentUser!.id;
+    DocumentReference docRef = firestore.collection('users').doc(userId);
+
+    Map<String, dynamic> data = {
+      'location': selectedCity
+    };
+
+    docRef.update(data).then((value) => print('localização atualizada'));
+  }
+
 }
 

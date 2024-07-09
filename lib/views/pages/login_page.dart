@@ -36,7 +36,6 @@ class _LoginPageState extends State<LoginPage> {
       } else {
         isProcessSuccess = await authController.signup(
           formData.name,
-          formData.origins,
           formData.email,
           formData.password,
           formData.image,

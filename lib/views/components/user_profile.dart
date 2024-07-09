@@ -1,6 +1,8 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:cerrado_vivo/controllers/mine_controller.dart';
 import 'package:cerrado_vivo/models/user_app.dart';
+import 'package:cerrado_vivo/utils/cities_list.dart';
+import 'package:cerrado_vivo/views/components/listview_cities.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:get/get.dart';
@@ -18,96 +20,70 @@ class UserProfileHeader extends StatelessWidget {
   Widget build(BuildContext context) {
     final double systemBarHeight = MediaQuery.of(context).viewPadding.top;
     final double appBarHeight = AppBar().preferredSize.height * 1.2;
-    final double circleAvatarRadius = appBarHeight / 2;
+    final double circleAvatarRadius = appBarHeight;
 
     print(systemBarHeight.toString());
 
-    return Column(
-      children: [
-        Stack(
-          children: [
-            AppBar(
-              toolbarHeight: appBarHeight,
-              backgroundColor: Theme.of(context).primaryColor,
-              elevation: 0.0,
-              automaticallyImplyLeading: false,
-              title: Text(user.name),
-              centerTitle: true,
-              leading: CachedNetworkImage(
-                imageUrl: user.imageUrl,
-                imageBuilder: (context, imageProvider) => CircleAvatar(
-                  radius: circleAvatarRadius,
-                  backgroundImage: NetworkImage(user.imageUrl),
+    return SizedBox(
+      height: MediaQuery.of(context).size.height * 0.33,
+      child: Column(
+        children: [
+          AppBar(
+            backgroundColor: Theme.of(context).primaryColor,
+            elevation: 0.0,
+            automaticallyImplyLeading: false,
+            title: Text(user.name), //isCurrentUser ? const Text('Seu Perfil') : const Text('Coletor'),
+            actions: [
+              IconButton(
+                onPressed: () {},
+                icon: const Icon(
+                  Icons.menu,
+                  size: 30,
+                  color: Colors.black,
                 ),
-                placeholder: (context, url) => CircularProgressIndicator(
-                  color: Theme.of(context).hintColor,
-                ),
-              ),
-              actions: [
-                IconButton(
-                  onPressed: () {},
-                  icon: const Icon(
-                    Icons.menu,
-                    size: 30,
-                    color: Colors.black,
-                  ),
-                )
-              ],
-            ),
-            // Positioned(
-            //   top: appBarHeight / 2 ,
-            //   left: appBarHeight / 2,
-            //   child: CachedNetworkImage(
-            //     imageUrl: user.imageUrl,
-            //     imageBuilder: (context, imageProvider) => CircleAvatar(
-            //       radius: circleAvatarRadius,
-            //       backgroundImage: NetworkImage(user.imageUrl),
-            //     ),
-            //     placeholder: (context, url) => CircularProgressIndicator(
-            //       color: Theme.of(context).hintColor,
-            //     ),
-            //   ),
-            // ),
-            // Positioned(
-              // top: appBarHeight / 1.5 + circleAvatarRadius / 2,
-              // left: appBarHeight / 2 + circleAvatarRadius * 2,
-              // right: 16,
-              // child: Expanded(
-                // child: Center(
-                  // child: Text(
-                    // user.name,
-                    // style: const TextStyle(
-                      // fontSize: 22,
-                      // fontWeight: FontWeight.bold,
-                    // ),
-                  // ),
-                // ),
-              // ),
-            // ),
-          ],
-        ),
-        SizedBox(height: MediaQuery.of(context).size.height * 0.02),
-        Container(
-          height: MediaQuery.of(context).size.height * 0.2,
-          padding: const EdgeInsets.symmetric(horizontal: 16.0),
-          child: Expanded(
-            child: Obx(
-              () => Column(
+              )
+            ],
+          ),
+          Container(
+            height: MediaQuery.of(context).size.height * 0.23,
+            padding: const EdgeInsets.only(top: 16.0,left: 16.0, right: 16.0),
+            child: Expanded(
+              child: Column(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  user.bio.value != ''
-                      ? Text(
-                          user.bio.value,
-                          maxLines: 3,
-                          textAlign: TextAlign.justify,
-                          style: const TextStyle(
-                            fontSize: 14,
-                          ),
-                        )
-                      : buttonAlterProfile(true),
-                  const SizedBox(height: 10),
-                  user.location.value != ''
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      CachedNetworkImage(
+                        imageUrl: user.imageUrl,
+                        imageBuilder: (context, imageProvider) => CircleAvatar(
+                          radius: circleAvatarRadius,
+                          backgroundImage: NetworkImage(user.imageUrl),
+                        ),
+                        placeholder: (context, url) => CircularProgressIndicator(
+                          color: Theme.of(context).hintColor,
+                        ),
+                      ),
+                      const SizedBox(width: 16,),
+                      Flexible(
+                        child: Obx(() {
+                          return user.bio.value != ''
+                            ? Text(
+                                user.bio.value,
+                                maxLines: 5,
+                                textAlign: TextAlign.justify,
+                                style: const TextStyle(
+                                  fontSize: 14,
+                                ),
+                              )
+                            : buttonAlterProfile(true);
+                        }),
+                      )
+                    ],
+                  ),
+                  Obx(() {
+                    return user.location.value != ''
                       ? Row(
                           children: [
                             Text(
@@ -123,13 +99,14 @@ class UserProfileHeader extends StatelessWidget {
                             )
                           ],
                         )
-                      : buttonAlterProfile(false)
+                      : buttonAlterProfile(false);
+                    }),
                 ],
               ),
             ),
           ),
-        ),
-      ],
+        ],
+      ),
     );
   }
 
@@ -137,7 +114,7 @@ class UserProfileHeader extends StatelessWidget {
     return Card(
       elevation: 4.0,
       child: InkWell(
-        onTap: showBioDialog,
+        onTap: isBio ? showBioDialog : showLocationDialog,
         child: Container(
           width: 118,
           decoration: BoxDecoration(
@@ -218,19 +195,17 @@ class UserProfileHeader extends StatelessWidget {
                           ),
                         ),
                       ),
-                      Container(
-                        child: TextButton(
-                          onPressed: () {
-                            mineController.editBio(controller.text);
-                            user.bio.value = controller.text;
-                            Get.back();
-                          },
-                          child: const Text(
-                            "Salvar",
-                            style: TextStyle(
-                                color: Color.fromARGB(255, 83, 172, 60),
-                                fontSize: 20),
-                          ),
+                      TextButton(
+                        onPressed: () {
+                          mineController.editBio(controller.text);
+                          user.bio.value = controller.text;
+                          Get.back();
+                        },
+                        child: const Text(
+                          "Salvar",
+                          style: TextStyle(
+                              color: Color.fromARGB(255, 83, 172, 60),
+                              fontSize: 20),
                         ),
                       ),
                     ],
@@ -243,5 +218,65 @@ class UserProfileHeader extends StatelessWidget {
       ),
     );
   }
-}
 
+  void showLocationDialog() {
+    try {
+      String? selectedCity;
+
+      Get.dialog(
+        AlertDialog(
+          title: const Text('Selecione sua cidade'),
+          scrollable: true,
+          content: SizedBox(
+            width: 250,
+            height: 400,
+            child: ListviewCities(
+              userApp: user,
+              onCitySelected: (city) {
+                selectedCity = city;
+              },
+            ),
+          ),
+          actionsAlignment: MainAxisAlignment.center,
+          actions: [
+            Row(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                TextButton(
+                  onPressed: () {
+                    Get.back();
+                  },
+                  child: Text(
+                    "Fechar",
+                    style: TextStyle(
+                      color: Colors.red.shade600,
+                      fontSize: 20,
+                    ),
+                  ),
+                ),
+                TextButton(
+                  onPressed: () {
+                    if (selectedCity != null) {
+                      mineController.editLocation(selectedCity);
+                      user.location.value = selectedCity!;
+                      Get.back();
+                    }
+                  },
+                  child: const Text(
+                    "Salvar",
+                    style: TextStyle(
+                      color: Color.fromARGB(255, 83, 172, 60),
+                      fontSize: 20,
+                    ),
+                  ),
+                ),
+              ],
+            ),
+          ],
+        ),
+      );
+    } catch (e) {
+      print(e.toString());
+    }
+  } 
+}

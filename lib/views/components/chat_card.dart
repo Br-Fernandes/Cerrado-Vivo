@@ -1,9 +1,11 @@
+import 'dart:io';
+
 import 'package:cerrado_vivo/models/chat.dart';
+import 'package:cerrado_vivo/models/user_app.dart';
 import 'package:cerrado_vivo/services/chat/conversation_firebase_service.dart';
-import 'package:cerrado_vivo/modelview/components/chat_card_view_model.dart';
+import 'package:cerrado_vivo/utils/chat_utils.dart';
 import 'package:cerrado_vivo/views/pages/chat_page.dart';
 import 'package:flutter/material.dart';
-import 'package:provider/provider.dart';
 
 class ChatCard extends StatefulWidget {
   final Chat chat;
@@ -15,76 +17,84 @@ class ChatCard extends StatefulWidget {
 }
 
 class _ChatCardState extends State<ChatCard> {
-  late final ChatCardViewModel _viewModel;
+  UserApp? _otherUser;
+  String? _lastMessage;
+  static const _defaultImage = 'assets/images/avatar.png';
 
   @override
   void initState() {
     super.initState();
-    _viewModel = ChatCardViewModel(
-      conversationFirebaseService: ConversationFirebaseService()
-    );
-    _viewModel.getOtherUser(widget.chat);
-    _viewModel.getLastMessage(widget.chat);
+    _fetchChatDetails();
+  }
+
+  Future<void> _fetchChatDetails() async {
+    _otherUser = await ChatUtils().getOtherUser(widget.chat);
+    _lastMessage = await ConversationFirebaseService().getlastMessage(widget.chat);
+    setState(() {}); // Atualiza o estado para refletir as mudanças na UI
+  }
+
+  ImageProvider _showUserImage(String imageUrl) {
+    final uri = Uri.parse(imageUrl);
+    if (uri.path.contains(_defaultImage)) {
+      return const AssetImage(_defaultImage);
+    } else if (uri.scheme.contains('http')) {
+      return NetworkImage(uri.toString());
+    } else {
+      return FileImage(File(uri.toString()));
+    }
   }
 
   @override
   Widget build(BuildContext context) {
-    if (_viewModel.otherUser == null) {
-      return const SizedBox
-          .shrink(); // Retorna um widget vazio enquanto o _otherUser é nulo
+    if (_otherUser == null) {
+      return const SizedBox.shrink(); // Retorna um widget vazio enquanto o _otherUser é nulo
     }
 
-    return ChangeNotifierProvider(
-      create: (_) => _viewModel,
-      child: Consumer<ChatCardViewModel>(
-        builder: (context, viewModel, child) {
-          return Container(
-            width: double.infinity,
-            height: 100,
-            decoration: const BoxDecoration(
-                border: Border(bottom: BorderSide(color: Colors.grey, width: 1))),
-            child: TextButton(
-              onPressed: () {
-                Navigator.of(context).push(MaterialPageRoute(
-                    builder: (context) => ChatPage(
-                          chat: widget.chat,
-                        )));
-              },
-              child: Row(
-                children: [
-                  Container(
-                    padding: const EdgeInsets.all(10),
-                    child: CircleAvatar(
-                      backgroundImage: viewModel.showUserImage(viewModel.otherUser!.imageUrl),
-                      radius: 80 / 2,
-                    ),
-                  ),
-                  Column(
-                    mainAxisAlignment: MainAxisAlignment.spaceAround,
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Text(
-                        viewModel.otherUser!.name,
-                        style: const TextStyle(
-                            fontSize: 19,
-                            fontWeight: FontWeight.bold,
-                            color: Colors.black),
-                      ),
-                      Text(
-                        viewModel.lastMessage ?? '...',
-                        textAlign: TextAlign.left,
-                        style: const TextStyle(
-                          color: Colors.grey,
-                        ),
-                      ),
-                    ],
-                  )
-                ],
+    return Container(
+      width: double.infinity,
+      height: 100,
+      decoration: const BoxDecoration(
+        border: Border(bottom: BorderSide(color: Colors.grey, width: 1)),
+      ),
+      child: TextButton(
+        onPressed: () {
+          Navigator.of(context).push(MaterialPageRoute(
+            builder: (context) => ChatPage(chat: widget.chat),
+          ));
+        },
+        child: Row(
+          children: [
+            Container(
+              padding: const EdgeInsets.all(10),
+              child: CircleAvatar(
+                backgroundImage: _showUserImage(_otherUser!.imageUrl),
+                radius: 40,
               ),
             ),
-          );
-        }
-      )
+            Column(
+              mainAxisAlignment: MainAxisAlignment.spaceAround,
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Text(
+                  _otherUser!.name,
+                  style: const TextStyle(
+                    fontSize: 19,
+                    fontWeight: FontWeight.bold,
+                    color: Colors.black,
+                  ),
+                ),
+                Text(
+                  _lastMessage ?? '...',
+                  textAlign: TextAlign.left,
+                  style: const TextStyle(
+                    color: Colors.grey,
+                  ),
+                ),
+              ],
+            ),
+          ],
+        ),
+      ),
     );
   }
 }

@@ -5,37 +5,42 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:get/get.dart';
 
 class ConversationController extends GetxController {
-  Future<Stream<List<Chat>>> conversationsStream() async {
+  Stream<List<Chat>> conversationsStream() {
     final currentUser = firebaseAuth.currentUser;
     if (currentUser != null) {
       String currentUserId = currentUser.uid;
-      final chatQuerySnapshot = await firestore
+      print("Current user ID: $currentUserId");
+
+      return firestore
           .collection('conversations')
           .where('users', arrayContains: currentUserId)
-          .get();
-    
-      final chatDocs = chatQuerySnapshot.docs;
-    
-      final chatList = await Future.wait(chatDocs.map((doc) async {
-        final data = doc.data();
-        final messageQuerySnapshot = await doc.reference.collection('messages').get();
-        final messages = await Future.wait(messageQuerySnapshot.docs.map((messageDoc) async {
-          return await _chatMessageFromFirestore(messageDoc);
+          .snapshots()
+          .asyncMap((chatQuerySnapshot) async {
+        print("Number of conversations: ${chatQuerySnapshot.docs.length}");
+        final chatDocs = chatQuerySnapshot.docs;
+
+        final chatList = await Future.wait(chatDocs.map((doc) async {
+          final data = doc.data();
+          final messageQuerySnapshot = await doc.reference.collection('messages').get();
+          print("Number of messages in conversation: ${messageQuerySnapshot.docs.length}");
+          
+          final messages = await Future.wait(messageQuerySnapshot.docs.map((messageDoc) async {
+            return await _chatMessageFromFirestore(messageDoc);
+          }));
+
+          return Chat(
+            users: List<String>.from(data['users']),
+            messages: messages,
+          );
         }));
-    
-        return Chat(
-          users: List<String>.from(data['users']),
-          messages: messages,
-        );
-      }));
-    
-      return Stream.value(chatList);
+
+        return chatList;
+      });
     } else {
-      // Lidar com o caso em que o usuário atual é nulo
-      return const Stream.empty();
+      print('Usuário atual é nulo');
+      return Stream.value([]);
     }
   }
-
 
   static Future<ChatMessage> _chatMessageFromFirestore(
     DocumentSnapshot<Map<String, dynamic>> snapshot,
@@ -52,21 +57,19 @@ class ConversationController extends GetxController {
     );
   }
 
-  Future<String> getlastMessage(Chat chat) async {
+  Future<String> getLastMessage(Chat chat) async {
     final store = FirebaseFirestore.instance;
-    final docSnapshot =  await store.collection('conversations').where('users', isEqualTo: chat.users).get();
+    final docSnapshot = await store.collection('conversations').where('users', isEqualTo: chat.users).get();
     final doc = docSnapshot.docs.first;
 
     final messageRef = doc.reference.collection('messages');
-    final messagesSnapshot = await messageRef.orderBy('createdAt', descending: true)
-      .limit(1)
-      .get();
+    final messagesSnapshot = await messageRef.orderBy('createdAt', descending: true).limit(1).get();
 
-    if(messagesSnapshot.docs.isNotEmpty) {
+    if (messagesSnapshot.docs.isNotEmpty) {
       final lastMessage = messagesSnapshot.docs.first.data()['text'] as String;
-       return lastMessage; 
+      return lastMessage;
     } else {
       return '';
-    }  
+    }
   }
 }

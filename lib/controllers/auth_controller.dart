@@ -50,7 +50,6 @@ class AuthController extends GetxController {
 
   Future<bool> signup(
     String name,
-    String origins,
     String email,
     String password,
     File? image,
@@ -130,6 +129,8 @@ class AuthController extends GetxController {
       'name': user.name,
       'email': user.email,
       'imageUrl': user.imageUrl,
+      'bio': user.bio.value,
+      'location': user.location.value
     });
   }
 
@@ -138,18 +139,27 @@ class AuthController extends GetxController {
     return currentUser != null;
   }
 
-  Future<UserApp?> toUserApp(User user) async {
+  Future<UserApp?> toUserApp(User user, [String? name, String? imageUrl]) async {
   try {
     DocumentSnapshot userDoc = await firestore.collection('users').doc(user.uid).get();
     if (userDoc.exists) {
-      Map<String, dynamic> userData = userDoc.data() as Map<String, dynamic>;
+      Map<String, dynamic>? userData = userDoc.data() as Map<String, dynamic>?;
+      if (userData != null) {
+        return UserApp(
+          id: userDoc.id,
+          name: userData['name'] as String,
+          email: userData['email'] as String,
+          imageUrl: userData['imageUrl'] as String,
+          userBio: userData['bio'] as String,
+        );
+      }
+    } else {
       return UserApp(
-        id: userDoc.id,
-        name: userData['name'] as String,
-        email: userData['email'] as String,
-        imageUrl: userData['imageUrl'] as String,
-        userBio: userData['bio'] as String,
-      );
+      id: user.uid,
+      name: name ?? user.displayName ?? user.email!.split('@')[0],
+      email: user.email!,
+      imageUrl: imageUrl ?? user.photoURL ?? 'assets/images/avatar.png',
+    );
     }
     return null;
   } catch (error) {
@@ -159,3 +169,5 @@ class AuthController extends GetxController {
 }
 
 }
+
+

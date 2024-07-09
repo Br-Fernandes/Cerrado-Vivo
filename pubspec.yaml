@@ -47,8 +47,8 @@ dependencies:
   cached_network_image: ^3.3.1
   get: ^4.6.6
   device_info_plus: ^10.1.0
-  cerrado_vivo_copy_3310202680_f2f:
-        git: https://f2f.bostonux.com/packages/cerrado_vivo_copy_3310202680_f2f
+  figma2flutter: ^0.3.0-alpha
+  
   
 dev_dependencies:
   flutter_test:

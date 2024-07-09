@@ -26,7 +26,7 @@ class MinePage extends StatelessWidget {
           return <Widget>[
             SliverAppBar(
               backgroundColor: Colors.white,
-              leading: null,
+              automaticallyImplyLeading: false,
               expandedHeight: MediaQuery.of(context).size.height * 0.4,
               floating: false,
               pinned: true,

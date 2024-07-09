@@ -29,7 +29,6 @@ class ConversationFirebaseService implements ConversationService {
           messages: messages,
         );
       }));
-    
       return Stream.value(chatList);
     } else {
       // Lidar com o caso em que o usuário atual é nulo

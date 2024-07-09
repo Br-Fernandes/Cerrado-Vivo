@@ -56,21 +56,6 @@ class _LoginFormState extends State<UserForm> {
                   return null;
                 },
               ),
-            const SizedBox( height: 7,),  
-            if (_formData.isSignup)   
-              ThisTextFormField(
-                key: const ValueKey('origins'),
-                label: 'Origens',
-                initialValue: _formData.origins,
-                onChanged: (origins) => _formData.origins = origins,
-                validator: (localOrigins) {
-                  final origins = localOrigins ?? '';
-                  if (origins.trim().length < 5) {
-                    return 'Nome deve ter no mínimo 5 caracteres.';
-                  }
-                  return null;
-                },
-              ),
             const SizedBox( height: 7,),
             ThisTextFormField(
               key: const ValueKey('email'),
